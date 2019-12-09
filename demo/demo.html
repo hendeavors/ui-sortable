@@ -1,29 +1,32 @@
-<section ng-app="sortableApp">
-  <h1>Sortable items</h1>
-  <div ng-controller="sortableController" class="section row">
-    <div class="col-sm-offset-2 col-sm-4">
-      <ul ui-sortable="sortableOptions" ng-model="list" class="list">
-        <li ng-repeat="item in list" class="item">{{item.text}}</li>
-      </ul>
-    </div>
-    <div class="col-sm-4">
-      <ul class="list logList">
-        <li ng-repeat="entry in sortingLog" class="logItem">{{entry.Text}}</li>
-      </ul>
-    </div>
+<link rel="stylesheet" href="../lib/css/jquery-ui.min.css">
+<link rel="stylesheet" href="../demo/demo.css">
+<script src="../lib/js/external/jquery.js"></script>
+<script src="../lib/js/jquery-ui.min.js"></script>
+<script src="../lib/js/angular.min.js"></script>
+<script src="../lib/js/angular-route.min.js"></script>
+<script src="../src/sortable.js"></script>
+<script src="../src/app.js"></script>
+
+<div ng-app="sortableApp" ng-controller="sortableController" class="container">
+  <h2>ui.sortable locked items demo</h2>
+
+  <div class="floatleft">
+    <ul ui-sortable="sortableOptions" ng-model="list" class="list">
+      <li ng-repeat="item in list" ng-class="{'not-sortable': item.locked}" class="item">
+        {{item.text}} [locked: {{item.locked}}]
+      </li>
+    </ul>
   </div>
 
-  <h1>Connected items</h1>
-  <div ng-controller="connectedController" class="section row connectedItemsExample">
-    <div class="col-sm-offset-2 col-sm-4">
-      <ul ui-sortable="sortableOptions" ng-model="leftArray" class="list">
-        <li ng-repeat="item in leftArray" class="item">{{item.text}}</li>
-      </ul>
-    </div>
-    <div class="col-sm-4">
-      <ul ui-sortable="sortableOptions" ng-model="rightArray" class="list">
-        <li ng-repeat="item in rightArray" class="item">{{item.text}}</li>
-      </ul>
-    </div>
+  <div class="floatleft" style="margin-left: 20px;">
+    <ul class="list logList">
+      <li ng-repeat="entry in sortingLog track by $index" class="logItem">
+        {{entry}}
+      </li>
+    </ul>
   </div>
-</section>
+
+  <div class="clear"></div>
+
+
+</div>

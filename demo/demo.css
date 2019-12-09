@@ -32,3 +32,9 @@
 	border: 5px solid #000;
 	border-radius: 15px;
 }
+
+.not-sortable {
+	color: #cccccc;
+	border: #aaaaaa 1px solid;
+	background-color: #eeeeee;
+}

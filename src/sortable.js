@@ -502,17 +502,63 @@ angular
               // If the received flag hasn't be set on the item, this is a
               // normal sort, if dropindex is set, the item was moved, so move
               // the items in the list.
+
+              var droppedIndex = ui.item.sortable.dropindex;
+              var touchedIndex = ui.item.sortable.index;
+
+              function lockedItem(ui) {
+                var tmpArr = Object.assign([], ngModel.$modelValue);
+
+                // The splice doesn't work for locked items in the middle
+                // Of the list, perhaps splice is the wrong choice?
+                function shiftUp() {
+                  if (droppedIndex > touchedIndex) {
+                    console.warn('shiftUp');
+                    for (var i = droppedIndex; i > touchedIndex; i--) {
+                      delete ngModel.$modelValue[i];
+                      tmpArr[i-1] = tmpArr[i];
+                      ngModel.$modelValue.push(tmpArr[i]);
+                    }
+                  }
+                }
+
+                function shiftDown() {
+                  if (touchedIndex > droppedIndex) {
+                    console.warn('shiftDown');
+                  }
+                }
+
+                shiftUp();
+                shiftDown();
+                console.log(ngModel.$modelValue);
+                // ngModel.$lockedModel = ngModel.$modelValue.map(function(k,v) {
+                //   if (k.locked == true)
+                //   return k;
+                // })
+                // ngModel.$modelValue.splice(
+                //   ui.item.sortable.dropindex,
+                //   0,
+                //   ngModel.$modelValue.splice(ui.item.sortable.index, 1)[0]
+                // );
+                //
+                // console.log(ngModel.$lockedModel);
+                // loop backwards from the touchedIndex all the way to droppedIndex
+                // if shifting onto locked item, then shift again
+              }
+
               var wasMoved =
                 'dropindex' in ui.item.sortable &&
                 !ui.item.sortable.isCanceled();
 
               if (wasMoved && !ui.item.sortable.received) {
+              //  lockedItem(ui);
                 scope.$apply(function() {
-                  ngModel.$modelValue.splice(
-                    ui.item.sortable.dropindex,
-                    0,
-                    ngModel.$modelValue.splice(ui.item.sortable.index, 1)[0]
-                  );
+                  lockedItem(ui);
+                  // ngModel.$modelValue.splice(
+                  //   ui.item.sortable.dropindex,
+                  //   0,
+                  //   ngModel.$modelValue.splice(ui.item.sortable.index, 1)[0]
+                  // );
                 });
                 scope.$emit('ui-sortable:moved', ui);
               } else if (
